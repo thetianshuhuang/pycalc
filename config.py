@@ -1,5 +1,17 @@
 """
 pycalc configuration options
+
+
+Example
+-------
+{
+    "name": name of module,
+    "namespace": name to import as; if None, the module is imported as *
+        (directly to global namespace)
+    "config": configuration options to pass to the _init method of the module
+        (optional)
+}
+
 """
 
 
@@ -27,4 +39,5 @@ MODULES = [
         "name": "numpy",
         "namespace": "np",
     },
+
 ]
