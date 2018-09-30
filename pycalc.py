@@ -68,6 +68,8 @@ def _pycalc_init():
              |___/
     """
 
+    _splash()
+
     success = 0
     for module in config.MODULES:
 
