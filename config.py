@@ -37,6 +37,9 @@ MODULES = [
     {
         "name": "phasor",
         "namespace": None,
+        "config": {
+            "enable_unicode": False,
+        }
     },
 
     # -- Numpy ----------------------------------------------------------------

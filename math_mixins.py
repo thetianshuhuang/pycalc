@@ -1,6 +1,12 @@
 
+"""Utility mixins for creating new math types"""
+
 
 class MathCompareMixin:
+    """Rich comparison method definitions
+
+    These mixins assume the base class already has a __abs__ value function.
+    """
 
     def __lt__(self, b):
         return self.__abs__() < b.__abs__()
@@ -22,6 +28,11 @@ class MathCompareMixin:
 
 
 class MathInPlaceMixin:
+    """In place math mixins
+
+    All for +=, /=, *=, and -= operations, assuming the appropriate
+    arithmetic operators are already implemented.
+    """
 
     def __iadd__(self, b):
         return self.__add__(b)
