@@ -79,6 +79,9 @@ class PhasorMathMixin:
     def __or__(self, b):
         return Phasor(1. / (1. / self.rect() + 1. / self._pass_or_rect(b)))
 
+    def __eq__(self, b):
+        return self.rect() == b.rect()
+
     def _pass_or_cvt(self, b):
         """Convert b to a phasor if not already a phasor
 
@@ -101,11 +104,37 @@ class PhasorMathMixin:
         ----------
         b : arbitrary type
             Type to be turned into a rect
+
+        Returns
+        -------
+        complex
+            intial value converted into a rectangular compelx number, if it
+            isn't one already
         """
         return (b if _is_c(b) else b.rect())
 
 
 class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
+    """Phasor class
+
+    Phasor class allowing addition, subtraction, multiplication, division, and
+    exponentiation. If phasors are compared, then the magnitude is used as the
+    value. Phasors in parallel (1/(1/a + 1/b)) can be computed with ``a | b``
+    (the 'or' operator).
+
+    Parameters
+    ----------
+    *args : complex[1] or complex[2]
+        complex number to initialize the phasor with, or the magnitude of the
+        phasor
+
+    Keyword Args
+    ------------
+    rad : float
+        Radian angle of the phasor
+    deg : float
+        Degree angle of the phasor
+    """
 
     def __init__(self, *args, **kwargs):
 
@@ -169,13 +198,34 @@ class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
         return self.theta % (2 * math.pi)
 
     def rect(self):
+        """Get the rectanguar representation of the phasor.
+
+        Returns
+        -------
+        complex
+            Rectangular representation of the phasor
+        """
 
         return cmath.rect(self.r, self.theta)
 
     def rad(self):
+        """Get the radian representation of the phasor.
+
+        Returns
+        -------
+        float[]
+            (magnitude, angle in radians)
+        """
 
         return (self.r, self._fmt_theta())
 
     def deg(self):
+        """Get the degree representation of the phasor.
+
+        Returns
+        -------
+        float[]
+            (magnitude, angle in degrees)
+        """
 
         return (self.r, math.degrees(self._fmt_theta()))

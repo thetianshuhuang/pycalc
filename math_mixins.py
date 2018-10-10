@@ -5,7 +5,8 @@
 class MathCompareMixin:
     """Rich comparison method definitions
 
-    These mixins assume the base class already has a __abs__ value function.
+    These mixins assume the base class already has a __abs__ value function
+    and a __eq__ function.
     """
 
     def __lt__(self, b):
@@ -13,9 +14,6 @@ class MathCompareMixin:
 
     def __le__(self, b):
         return self.__abs__() <= b.__abs__()
-
-    def __eq__(self, b):
-        return self.rect() == b.rect()
 
     def __ne__(self, b):
         return not self.__eq__(b)
