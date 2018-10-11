@@ -30,3 +30,12 @@ Edit ```config.py``` to add more modules to import on startup.
         (optional)
 }
 ```
+
+
+## Changes
+
+### v0.1
+Initial version. Features dynamic module loading, and a configurable math bindings module.
+
+### v0.2
+Added Phasor library and installer.

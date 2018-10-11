@@ -35,8 +35,8 @@ def load_module(config):
     module = importlib.import_module(config["name"])
 
     # Run config
-    if "config" in config:
-        module._init(config["config"])
+    if hasattr(module, "_init"):
+        module._init(config["config"] if "config" in config else {})
 
     # Not an 'import *'
     if config["namespace"] is not None:
@@ -69,6 +69,13 @@ def _pycalc_init():
     """
 
     _splash()
+
+    print(
+        "Using Python {major}.{minor}.{micro}."
+        .format(
+            major=sys.version_info.major,
+            minor=sys.version_info.minor,
+            micro=sys.version_info.micro))
 
     success = 0
     for module in config.MODULES:
