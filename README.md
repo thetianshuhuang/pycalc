@@ -2,17 +2,20 @@
 
 ## Usage
 
-Run
+On linux, you can install pycalc with
+```shell
+make install
+```
+
+or, if python 2 is desired,
+```shell
+make install-py2
+```
+
+Otherwise, run
 ```shell
 python -i pycalc.py
 ```
-
-or, for linux, just
-```shell
-./pycalc
-```
-
-(You may need to ```chmod +x pycalc.sh``` to run the shell script.)
 
 ## Configuration
 
