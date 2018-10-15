@@ -60,7 +60,7 @@ class PhasorMathMixin:
     def __add__(self, x):
         return Phasor(self.rect() + self._pass_or_rect(x))
 
-    def __div__(self, x):
+    def __truediv__(self, x):
         return Phasor(self.rect() / self._pass_or_rect(x))
 
     def __mul__(self, x):
@@ -170,7 +170,13 @@ class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
         return "Phasor " + self.__str__()
 
     def _init_rect(self, args):
-        self.r, self.theta = cmath.polar(args[0])
+
+        if hasattr(args[0], "r") and hasattr(args[0], "theta"):
+            self.r = args[0].r
+            self.theta = args[0].theta
+
+        else:
+            self.r, self.theta = cmath.polar(args[0])
 
     def _init_inference(self, args):
         mode = "degree" if args[1] > math.pi * 2 else "radian"
