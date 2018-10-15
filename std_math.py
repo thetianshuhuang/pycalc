@@ -16,6 +16,7 @@ e, pi
 
 
 import math
+import cmath
 
 
 # -- Trig Functions -----------------------------------------------------------
@@ -34,6 +35,15 @@ sqrt = math.sqrt
 
 ln = math.log
 log = math.log
+
+
+# -- Exp ----------------------------------------------------------------------
+
+def exp(x):
+    if type(x) == complex:
+        return cmath.exp(x)
+    else:
+        return math.exp(x)
 
 
 # -- Constants ----------------------------------------------------------------

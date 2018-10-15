@@ -7,7 +7,7 @@ import sys
 pycalc = sys.modules[__name__]
 
 
-_MODULE_VERSION = "V0.2"
+_MODULE_VERSION = "V0.3"
 _MODULE_INFO = "Tianshu Huang"
 
 
@@ -95,6 +95,8 @@ def _pycalc_init():
     print(
         "{n} modules specified ({s} loaded successfully)."
         .format(n=len(config.MODULES), s=success))
+
+    print("")
 
 
 _pycalc_init()
