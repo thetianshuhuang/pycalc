@@ -48,7 +48,7 @@ class MathInPlaceMixin:
         return self.__mul__(b)
 
     def __rmul__(self, b):
-        return self.__rmul__(b)
+        return self.__mul__(b)
 
     def __isub__(self, b):
         return self.__sub__(b)

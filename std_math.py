@@ -16,6 +16,7 @@ e, pi
 
 
 import math
+import sys
 import cmath
 
 
@@ -56,7 +57,7 @@ pi = math.pi
 
 def _init(cfg):
 
-    if(cfg["degree_mode"]):
+    if cfg["degree_mode"]:
 
         def sin(x):
             return math.sin(math.radians(x))
@@ -66,3 +67,8 @@ def _init(cfg):
 
         def tan(x):
             return math.tan(math.radians(x))
+
+    if cfg["complex_alias"]:
+        std_math = sys.modules[__name__]
+        for i in range(100):
+            setattr(std_math, 'j' + str(i + 1), (i + 1) * 1j)

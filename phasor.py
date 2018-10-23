@@ -24,6 +24,12 @@ from math_mixins import MathCompareMixin, MathInPlaceMixin
 
 # Flag to enable unicode symbols
 _ENABLE_UNICODE = False
+# Enable degree mode
+_DEGREE_MODE = False
+# Rounding
+_PRECISION = 2
+# Allowed complex number types
+_COMPLEX_TYPES = [int, float, complex]
 
 
 def _is_c(b):
@@ -40,7 +46,8 @@ def _is_c(b):
     bool
         True if b matches an approved complex number type
     """
-    return type(b) == int or type(b) == float or type(b) == complex
+
+    return type(b) in _COMPLEX_TYPES
 
 
 def _init(cfg):
@@ -49,6 +56,12 @@ def _init(cfg):
     if cfg["enable_unicode"]:
         global _ENABLE_UNICODE
         _ENABLE_UNICODE = True
+    if cfg["degree_mode"]:
+        global _DEGREE_MODE
+        _DEGREE_MODE = True
+    if "precision" in cfg:
+        global _PRECISION
+        _PRECISION = cfg["precision"]
 
 
 class PhasorMathMixin:
@@ -162,7 +175,9 @@ class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
 
         return (
             (u"{r} \u2220{theta}" if _ENABLE_UNICODE else "{r} <{theta}")
-            .format(r=round(self.r, 2), theta=round(self._fmt_theta(), 2))
+            .format(
+                r=round(self.r, _PRECISION),
+                theta=round(self._fmt_theta(), _PRECISION))
         )
 
     def __repr__(self):
@@ -201,7 +216,8 @@ class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
         print("Input mode not recognized.")
 
     def _fmt_theta(self):
-        return self.theta % (2 * math.pi)
+        rad = (self.theta + math.pi) % (2 * math.pi) - math.pi
+        return math.degrees(rad) if _DEGREE_MODE else rad
 
     def rect(self):
         """Get the rectanguar representation of the phasor.

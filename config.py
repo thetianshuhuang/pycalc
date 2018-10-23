@@ -29,7 +29,8 @@ MODULES = [
         "name": "std_math",
         "namespace": None,
         "config": {
-            "degree_mode": True
+            "degree_mode": True,
+            "complex_alias": True,
         },
     },
 
@@ -45,6 +46,18 @@ MODULES = [
         "namespace": None,
         "config": {
             "enable_unicode": False,
+            "degree_mode": True,
+            "precision": 3,
+        }
+    },
+
+    # -- AC Circuits ----------------------------------------------------------
+    {
+        "name": "circuits",
+        "namespace": "ac",
+        "config": {
+            "abbreviate_names": True,
+            "use_w": True,
         }
     },
 

@@ -9,6 +9,8 @@ pycalc = sys.modules[__name__]
 
 _MODULE_VERSION = "V0.3"
 _MODULE_INFO = "Tianshu Huang"
+_ERRORS = {}
+_SUCCESS = {}
 
 
 def _splash():
@@ -23,7 +25,7 @@ def _splash():
 """.format(version=_MODULE_VERSION, info=_MODULE_INFO))
 
 
-def load_module(config):
+def _load_module(config):
     """Load a module with parameters specified in a dictionary.
 
     Parameters
@@ -36,7 +38,10 @@ def load_module(config):
 
     # Run config
     if hasattr(module, "_init"):
-        module._init(config["config"] if "config" in config else {})
+        status = module._init(
+            config["config"] if "config" in config else {})
+    else:
+        status = None
 
     # Not an 'import *'
     if config["namespace"] is not None:
@@ -56,6 +61,8 @@ def load_module(config):
 
         globals().update(
             {name: getattr(module, name) for name in names})
+
+    return status
 
 
 def _pycalc_init():
@@ -81,22 +88,60 @@ def _pycalc_init():
     for module in config.MODULES:
 
         try:
-            load_module(module)
+            status = _load_module(module)
             print(
                 "Module <{name}> loaded successfully."
                 .format(name=module["name"]))
-            success += 1
+            if hasattr(status, '__call__'):
+                status()
 
-        except ImportError:
+            success += 1
+            _SUCCESS[module["name"]] = module
+
+        except ImportError as e:
             print(
                 "Module <{name}> could not be loaded."
                 .format(name=module["name"]))
+            print(
+                "    Call info(\"{name}\") to display the error message."
+                .format(name=module["name"]))
+
+            # Save error
+            _ERRORS[module["name"]] = e
 
     print(
         "{n} modules specified ({s} loaded successfully)."
         .format(n=len(config.MODULES), s=success))
 
     print("")
+
+
+def info(name):
+    """Get the error for a module.
+
+    Parameters
+    ----------
+    name : str
+        Target module name
+
+    Returns
+    -------
+    ImportError
+        If error found; error generated on module load
+    dict
+        If no error found, but module was loaded
+    None
+        No module found
+    """
+
+    if name in _ERRORS:
+        return _ERRORS[name]
+    elif name not in _SUCCESS:
+        print("No such module: <{name}>".format(name=name))
+        return None
+    else:
+        print("Module <{name}> reported no errors.".format(name=name))
+        return _SUCCESS[name]
 
 
 _pycalc_init()

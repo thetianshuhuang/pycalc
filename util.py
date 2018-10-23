@@ -12,9 +12,11 @@ import sys
 
 
 def _init(config):
-    """Print out module info."""
+    """Returns a print statement for module info"""
 
-    print("> Type 'exit' to exit, or 'man' for more information.")
+    def pf():
+        print("  > Type 'exit' to exit, or 'man' for more information.")
+    return pf
 
 
 class _ListDir():
