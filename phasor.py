@@ -86,8 +86,11 @@ class PhasorMathMixin:
     def __sub__(self, x):
         return Phasor(self.rect() - self._pass_or_rect(x))
 
-    def __ipow__(self, b):
+    def __pow__(self, b):
         return Phasor(self.rect() ** (self._pass_or_rect(b)))
+
+    def __ipow__(self, b):
+        return self.__pow__(b)
 
     def __or__(self, b):
         return Phasor(1. / (1. / self.rect() + 1. / self._pass_or_rect(b)))
@@ -239,7 +242,7 @@ class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
             (magnitude, angle in radians)
         """
 
-        return (self.r, self._fmt_theta())
+        return (self.r, self.theta)
 
     def deg(self):
         """Get the degree representation of the phasor.
@@ -251,3 +254,14 @@ class Phasor(MathCompareMixin, MathInPlaceMixin, PhasorMathMixin):
         """
 
         return (self.r, math.degrees(self._fmt_theta()))
+
+    def conj(self):
+        """Get the complex conjugate.
+
+        Returns
+        -------
+        Phasor
+            Complex conjuage of this.
+        """
+
+        return Phasor(self.r, rad=-self.theta)
