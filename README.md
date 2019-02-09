@@ -1,5 +1,8 @@
 # PyCalc
 
+## Dependencies
+- [print](https://github.com/thetianshuhuang/print)
+
 ## Usage
 
 On linux, you can install pycalc with

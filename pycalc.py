@@ -4,10 +4,13 @@
 import config
 import importlib
 import sys
+
+from print import *
+
 pycalc = sys.modules[__name__]
 
 
-_MODULE_VERSION = "V0.3"
+_MODULE_VERSION = "V1.0"
 _MODULE_INFO = "Tianshu Huang"
 _ERRORS = {}
 _SUCCESS = {}
@@ -16,13 +19,14 @@ _SUCCESS = {}
 def _splash():
     """Print splash text"""
     print("""
-   ____         ____      _
-  |  _ \ _   _ / ___|__ _| | ___
-  | |_) | | | | |   / _` | |/ __|
-  |  __/| |_| | |__| (_| | | (__
-  |_|    \__, |\____\__,_|_|\___|
-         |___/ {version} {info}
-""".format(version=_MODULE_VERSION, info=_MODULE_INFO))
+     ____         ____      _
+    |  _ \ _   _ / ___|__ _| | ___
+    | |_) | | | | |   / _` | |/ __|
+    |  __/| |_| | |__| (_| | | (__
+    |_|    \__, |\____\__,_|_|\___|
+           |___/ {version} {info}
+
+""".format(version=_MODULE_VERSION, info=_MODULE_INFO), RED, BOLD)
 
 
 def _load_module(config):
@@ -82,7 +86,7 @@ def _pycalc_init():
         .format(
             major=sys.version_info.major,
             minor=sys.version_info.minor,
-            micro=sys.version_info.micro))
+            micro=sys.version_info.micro), BR + BLUE, BOLD)
 
     success = 0
     for module in config.MODULES:
@@ -91,7 +95,7 @@ def _pycalc_init():
             status = _load_module(module)
             print(
                 "Module <{name}> loaded successfully."
-                .format(name=module["name"]))
+                .format(name=module["name"]), BR + GREEN)
             if hasattr(status, '__call__'):
                 status()
 
@@ -101,9 +105,9 @@ def _pycalc_init():
         except ImportError as e:
             print(
                 "Module <{name}> could not be loaded."
-                .format(name=module["name"]))
+                .format(name=module["name"]), BR + RED)
             print(
-                "    Call info(\"{name}\") to display the error message."
+                "  > Call info(\"{name}\") to display the error message."
                 .format(name=module["name"]))
 
             # Save error
@@ -111,9 +115,12 @@ def _pycalc_init():
 
     print(
         "{n} modules specified ({s} loaded successfully)."
-        .format(n=len(config.MODULES), s=success))
+        .format(n=len(config.MODULES), s=success), BR + BLUE, BOLD)
 
     print("")
+
+    sys.ps1 = render(">>> ", BR + RED, BOLD)
+    sys.ps2 = render("... ", BR + BLACK)
 
 
 def info(name):
@@ -137,10 +144,12 @@ def info(name):
     if name in _ERRORS:
         return _ERRORS[name]
     elif name not in _SUCCESS:
-        print("No such module: <{name}>".format(name=name))
+        print("No such module: <{name}>".format(name=name), BR + YELLOW)
         return None
     else:
-        print("Module <{name}> reported no errors.".format(name=name))
+        print(
+            "Module <{name}> reported no errors.".format(name=name),
+            BR + GREEN)
         return _SUCCESS[name]
 
 

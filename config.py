@@ -66,5 +66,4 @@ MODULES = [
         "name": "numpy",
         "namespace": "np",
     },
-
 ]
