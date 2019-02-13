@@ -20,6 +20,18 @@ Otherwise, run
 python -i pycalc.py
 ```
 
+for the full shell experience, or
+```shell
+python pycalc.py 'your expression here'
+```
+
+to evaluate a single command:
+```shell
+$ alias c='python pycalc.py'
+$ c 1 + 1
+[pycalc] 1 + 1 = 2
+```
+
 ## AC Circuits Module
 
 
