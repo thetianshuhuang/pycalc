@@ -29,7 +29,7 @@ def _splash():
 """.format(version=_MODULE_VERSION, info=_MODULE_INFO), RED, BOLD)
 
 
-def _load_module(config):
+def _load_module(config, silent=False):
     """Load a module with parameters specified in a dictionary.
 
     Parameters
@@ -69,7 +69,7 @@ def _load_module(config):
     return status
 
 
-def _pycalc_init():
+def _pycalc_init(silent=False):
     """Closure to initialize
        ____         ____      _
       |  _ \ _   _ / ___|__ _| | ___
@@ -79,45 +79,56 @@ def _pycalc_init():
              |___/
     """
 
-    _splash()
+    if not silent:
+        _splash()
 
-    print(
-        "Using Python {major}.{minor}.{micro}."
-        .format(
-            major=sys.version_info.major,
-            minor=sys.version_info.minor,
-            micro=sys.version_info.micro), BR + BLUE, BOLD)
+        print(
+            "Using Python {major}.{minor}.{micro}."
+            .format(
+                major=sys.version_info.major,
+                minor=sys.version_info.minor,
+                micro=sys.version_info.micro), BR + BLUE, BOLD)
 
     success = 0
     for module in config.MODULES:
 
         try:
             status = _load_module(module)
-            print(
-                "Module <{name}> loaded successfully."
-                .format(name=module["name"]), BR + GREEN)
-            if hasattr(status, '__call__'):
-                status()
+
+            if not silent:
+                print(
+                    "Module <{name}> loaded successfully."
+                    .format(name=module["name"]), BR + GREEN)
+
+                if hasattr(status, '__call__'):
+                    status()
 
             success += 1
             _SUCCESS[module["name"]] = module
 
         except ImportError as e:
-            print(
-                "Module <{name}> could not be loaded."
-                .format(name=module["name"]), BR + RED)
-            print(
-                "  > Call info(\"{name}\") to display the error message."
-                .format(name=module["name"]))
+
+            if not silent:
+                print(
+                    "Module <{name}> could not be loaded."
+                    .format(name=module["name"]), BR + RED)
+                print(
+                    "  > Call info(\"{name}\") to display the error message."
+                    .format(name=module["name"]))
+
+            else:
+                print(
+                    "Error loading module <" + module["name"] +
+                    ">; load full pycalc shell for more information")
 
             # Save error
             _ERRORS[module["name"]] = e
 
-    print(
-        "{n} modules specified ({s} loaded successfully)."
-        .format(n=len(config.MODULES), s=success), BR + BLUE, BOLD)
-
-    print("")
+    if not silent:
+        print(
+            "{n} modules specified ({s} loaded successfully)."
+            .format(n=len(config.MODULES), s=success), BR + BLUE, BOLD)
+        print("")
 
     sys.ps1 = render(">>> ", BR + RED, BOLD)
     sys.ps2 = render("... ", BR + BLACK)
@@ -153,4 +164,22 @@ def info(name):
         return _SUCCESS[name]
 
 
-_pycalc_init()
+if __name__ == "__main__":
+
+    if len(sys.argv) == 0:
+        _pycalc_init()
+
+    else:
+        _pycalc_init(silent=True)
+        cmd = " ".join(sys.argv[1:])
+        try:
+            res = eval(cmd)
+            print(
+                render("[pycalc] ", BR + RED, BOLD) +
+                render(cmd + " = ") +
+                render(str(eval(cmd))), BOLD)
+        except Exception as e:
+            print(
+                render("[pycalc] ", BR + RED, BOLD) +
+                render(cmd))
+            print(str(e))
