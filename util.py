@@ -56,7 +56,8 @@ class _Man():
     exit        Exit python
     ls          List current directory
     man         This command
-    cd(path)    Change current directory""")
+    cd(path)    Change current directory
+    cat(file)   Show contents of file""")
         return ""
 
 
@@ -68,3 +69,9 @@ man = _Man()
 def cd(path):
     """Function to change directory"""
     os.chdir(path)
+
+
+def cat(path):
+    """Function to show file contents"""
+    with open(path) as f:
+        print(''.join(f.readlines()))

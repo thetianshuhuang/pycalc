@@ -92,4 +92,4 @@ Added AC Circuits library
 Added invidual command execution
 
 ### v1.1
-Made error messages red to ease readability
+Made error messages red to ease readability; added ```cat```
