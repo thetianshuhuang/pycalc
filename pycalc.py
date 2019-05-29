@@ -10,7 +10,7 @@ from print import *
 pycalc = sys.modules[__name__]
 
 
-_MODULE_VERSION = "V1.0"
+_MODULE_VERSION = "V1.1"
 _MODULE_INFO = "Tianshu Huang"
 _ERRORS = {}
 _SUCCESS = {}
@@ -182,4 +182,4 @@ if __name__ == "__main__":
             print(
                 render("[pycalc] ", BR + RED, BOLD) +
                 render(cmd))
-            print(str(e))
+            print(" => " + str(e), BR + RED, BOLD)

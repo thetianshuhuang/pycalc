@@ -87,3 +87,9 @@ Added Phasor library and installer.
 
 ### v0.3
 Added AC Circuits library
+
+### v1.0
+Added invidual command execution
+
+### v1.1
+Made error messages red to ease readability
